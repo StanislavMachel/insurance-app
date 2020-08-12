@@ -1,3 +1,10 @@
 table {
   width: 100%;
 }
+
+$check-columns-padding: 15px;
+
+.check-columns {
+  width: calc(100%-$check-columns-padding);
+  padding: $check-columns-padding;
+}

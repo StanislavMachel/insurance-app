@@ -12,6 +12,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CalculationResultsComponent } from './calculation-results/calculation-results.component';
 
 @NgModule({
@@ -28,6 +29,7 @@ import { CalculationResultsComponent } from './calculation-results/calculation-r
     MatToolbarModule,
     MatButtonModule,
     MatTableModule,
+    MatCheckboxModule,
     HttpClientModule,
   ],
   providers: [],

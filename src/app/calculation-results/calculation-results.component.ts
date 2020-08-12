@@ -24,8 +24,6 @@ export class CalculationResultsComponent implements OnInit {
   dataSource = new MatTableDataSource();
 
   showMonthlyFee(checked: boolean) {
-    console.log(checked);
-
     if (checked) {
       this.displayedColumns.push(this.monthlyFee);
     } else {

@@ -1,4 +1,11 @@
+<div class="check-columns">
+    <mat-checkbox (change)="showMonthlyFee($event.checked)">Show monthly fee</mat-checkbox>
+</div>
+
+
 <div class="mat-elevation-z8">
+
+
     <table mat-table [dataSource]="dataSource">
         <!-- Vehicle plate number column -->
         <ng-container matColumnDef="vehiclePlateNumber">

@@ -9,6 +9,8 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./calculation-results.component.scss'],
 })
 export class CalculationResultsComponent implements OnInit {
+  readonly monthlyFee = 'monthlyFee';
+
   displayedColumns: string[] = [
     'vehiclePlateNumber',
     'vehicleFirstRegistration',
@@ -16,11 +18,20 @@ export class CalculationResultsComponent implements OnInit {
     'vehicleProducer',
     'vehicleMileage',
     'vehiclePreviousIndemnity',
-    'monthlyFee',
-    'annualFee',
     'calcParameters',
+    'annualFee',
   ];
   dataSource = new MatTableDataSource();
+
+  showMonthlyFee(checked: boolean) {
+    if (checked) {
+      this.displayedColumns.push(this.monthlyFee);
+    } else {
+      this.displayedColumns = this.displayedColumns.filter(
+        (item) => item !== this.monthlyFee
+      );
+    }
+  }
 
   constructor(private calculationResultService: CalculationResultService) {}
 

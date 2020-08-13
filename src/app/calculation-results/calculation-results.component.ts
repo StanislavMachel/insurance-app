@@ -1,7 +1,9 @@
 import { CalculationResultService } from '../services/calculation-result.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CalculationResult } from 'src/common/calculation-result';
 import { MatTableDataSource } from '@angular/material/table';
+import { Page } from 'src/common/page';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-calculation-results',
@@ -21,7 +23,24 @@ export class CalculationResultsComponent implements OnInit {
     'calcParameters',
     'annualFee',
   ];
+
   dataSource = new MatTableDataSource();
+
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+
+  pageSize = 10;
+  pageSizeOptions: number[] = [this.pageSize, 20, 50];
+
+  constructor(private calculationResultService: CalculationResultService) {}
+
+  ngOnInit(): void {
+    this.calculationResultService
+      .getCalculationResults({ page: 0, size: this.pageSize })
+      .subscribe((pageOfCalculationResults: Page<CalculationResult[]>) => {
+        this.dataSource.data = pageOfCalculationResults.content;
+        this.paginator.length = pageOfCalculationResults.totalElements;
+      });
+  }
 
   showMonthlyFee(checked: boolean) {
     if (checked) {
@@ -33,13 +52,15 @@ export class CalculationResultsComponent implements OnInit {
     }
   }
 
-  constructor(private calculationResultService: CalculationResultService) {}
-
-  ngOnInit(): void {
+  getPaginatorData() {
     this.calculationResultService
-      .getCalculationResults()
-      .subscribe((calculationResults: CalculationResult[]) => {
-        this.dataSource.data = calculationResults;
+      .getCalculationResults({
+        page: this.paginator.pageIndex,
+        size: this.paginator.pageSize,
+      })
+      .subscribe((pageOfCalculationResults: Page<CalculationResult[]>) => {
+        this.dataSource.data = pageOfCalculationResults.content;
+        this.paginator.length = pageOfCalculationResults.totalElements;
       });
   }
 }

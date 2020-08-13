@@ -1,8 +1,10 @@
+import { Pageble } from './../../common/pageble';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CalculationResult } from 'src/common/calculation-result';
+import { Page } from './../../common/page';
 
 @Injectable({
   providedIn: 'root',
@@ -12,10 +14,19 @@ export class CalculationResultService {
 
   constructor(private http: HttpClient) {}
 
-  getCalculationResults(): Observable<CalculationResult[]> {
-    return this.http.get(this.url).pipe(
-      map((response: any[]) => {
-        return response.map((item) => ({
+  getCalculationResults(
+    pageble: Pageble
+  ): Observable<Page<CalculationResult[]>> {
+    let params = '';
+    if (pageble != null) {
+      params += `page=${pageble.page}&size=${pageble.size}`;
+    }
+
+    return this.http.get(`${this.url}?${params}&sort=id,ASC`).pipe(
+      map((page: Page<any>) => {
+        console.log(page);
+
+        page.content = page.content.map((item) => ({
           vehiclePlateNumber: item.vehicle.plateNumber,
           vehicleFirstRegistration: item.vehicle.firstRegistration,
           vehiclePurchasePrice: item.vehicle.purchasePrice,
@@ -26,6 +37,8 @@ export class CalculationResultService {
           annualFee: item.annualFee,
           calcParameters: item.parameterRisks.map((item) => item.parameterName),
         }));
+
+        return page;
       })
     );
   }

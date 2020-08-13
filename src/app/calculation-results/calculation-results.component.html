@@ -40,28 +40,34 @@
         <!-- Vehicle previous indemnity column -->
         <ng-container matColumnDef="vehiclePreviousIndemnity">
             <th mat-header-cell *matHeaderCellDef>Vehicle previous indemnity</th>
-            <td mat-cell *matCellDef="let element">{{element.vehiclePreviousIndemnity}}</td>
+            <td mat-cell *matCellDef="let element">{{element.vehiclePreviousIndemnity | number:'1.2'}}</td>
         </ng-container>
 
         <!-- Monthly fee column -->
         <ng-container matColumnDef="monthlyFee">
             <th mat-header-cell *matHeaderCellDef>Monthly fee</th>
-            <td mat-cell *matCellDef="let element">{{element.monthlyFee}}</td>
+            <td mat-cell *matCellDef="let element">{{element.monthlyFee | currency:'EUR'}}</td>
         </ng-container>
 
         <!-- Annual fee column -->
         <ng-container matColumnDef="annualFee">
             <th mat-header-cell *matHeaderCellDef>Annual fee</th>
-            <td mat-cell *matCellDef="let element">{{element.annualFee}}</td>
+            <td mat-cell *matCellDef="let element">{{element.annualFee | currency:'EUR'}}</td>
         </ng-container>
 
         <!-- Calc parameters column -->
         <ng-container matColumnDef="calcParameters">
             <th mat-header-cell *matHeaderCellDef>Calc parameters</th>
-            <td mat-cell *matCellDef="let element">{{element.calcParameters}}</td>
+            <td mat-cell *matCellDef="let element">
+                <mat-chip-list>
+                    <mat-chip *ngFor="let calcParameter of element.calcParameters">{{calcParameter}}</mat-chip>
+                </mat-chip-list>
+            </td>
+
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    <mat-paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons (page)="getPaginatorData()"></mat-paginator>
 </div>

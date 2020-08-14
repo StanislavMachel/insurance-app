@@ -30,16 +30,12 @@ export class CalculationResultsComponent implements OnInit {
 
   pageSize = 10;
   pageSizeOptions: number[] = [this.pageSize, 20, 50];
+  withIndemnityRisk: boolean = false;
 
   constructor(private calculationResultService: CalculationResultService) {}
 
   ngOnInit(): void {
-    this.calculationResultService
-      .getCalculationResults({ page: 0, size: this.pageSize })
-      .subscribe((pageOfCalculationResults: Page<CalculationResult[]>) => {
-        this.dataSource.data = pageOfCalculationResults.content;
-        this.paginator.length = pageOfCalculationResults.totalElements;
-      });
+    this.getCalculationResult(0, this.pageSize);
   }
 
   showMonthlyFee(checked: boolean) {
@@ -52,12 +48,37 @@ export class CalculationResultsComponent implements OnInit {
     }
   }
 
+  calculationWithIndemnityRisk(checked: boolean) {
+    this.withIndemnityRisk = checked;
+    this.getPaginatorData();
+  }
+
+  readonly vehicleValue = 'vehicle_value';
+  readonly vehicleAge = 'vehicle_age';
+  readonly previousIndemnity = 'previous_indemnity';
+
+  private getIncludeParams() {
+    return this.withIndemnityRisk
+      ? [this.vehicleValue, this.vehicleAge, this.previousIndemnity]
+      : [this.vehicleValue, this.vehicleAge];
+  }
+
   getPaginatorData() {
+    this.getCalculationResult(
+      this.paginator.pageIndex,
+      this.paginator.pageSize
+    );
+  }
+
+  private getCalculationResult(pageIndex: number, pageSize: number) {
     this.calculationResultService
-      .getCalculationResults({
-        page: this.paginator.pageIndex,
-        size: this.paginator.pageSize,
-      })
+      .getCalculationResults(
+        {
+          page: pageIndex,
+          size: pageSize,
+        },
+        this.getIncludeParams()
+      )
       .subscribe((pageOfCalculationResults: Page<CalculationResult[]>) => {
         this.dataSource.data = pageOfCalculationResults.content;
         this.paginator.length = pageOfCalculationResults.totalElements;

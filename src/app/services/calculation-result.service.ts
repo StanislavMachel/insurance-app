@@ -15,11 +15,16 @@ export class CalculationResultService {
   constructor(private http: HttpClient) {}
 
   getCalculationResults(
-    pageble: Pageble
+    pageble: Pageble,
+    includeParameterNames: string[] = null
   ): Observable<Page<CalculationResult[]>> {
     let params = '';
     if (pageble != null) {
       params += `page=${pageble.page}&size=${pageble.size}`;
+    }
+
+    if (includeParameterNames != null) {
+      params += `&includeParameterNames=${includeParameterNames.toString()}`;
     }
 
     return this.http.get(`${this.url}?${params}&sort=id,ASC`).pipe(

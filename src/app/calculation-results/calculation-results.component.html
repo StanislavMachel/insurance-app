@@ -1,5 +1,9 @@
 <div class="check-columns">
-    <mat-checkbox (change)="showMonthlyFee($event.checked)">Show monthly fee</mat-checkbox>
+    <mat-checkbox class="check-box" (change)="showMonthlyFee($event.checked)">Show monthly fee</mat-checkbox>
+    <mat-checkbox class="check-box" [checked]="withIndemnityRisk"
+        (change)="calculationWithIndemnityRisk($event.checked)">
+        Calculation with indemnity risk
+    </mat-checkbox>
 </div>
 
 
